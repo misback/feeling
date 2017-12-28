@@ -11,11 +11,13 @@ GLInit::GLInit()
 {
 }
 
-GLInit::~GLInit() {
-
+GLInit::~GLInit()
+{
 }
 
-bool GLInit::initDisplay() {
+bool GLInit::initDisplay(ANativeWindow *window)
+{
+    _mWindow = window;
     assert(_mWindow);
     _mDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
     if (_mDisplay == EGL_NO_DISPLAY) {
@@ -28,7 +30,7 @@ bool GLInit::initDisplay() {
         onDestroy();
         return false;
     }
-    static const EGLint attribs2[] = {
+    EGLint attribs2[] = {
         EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
         EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
         EGL_BLUE_SIZE, 5,
@@ -52,7 +54,7 @@ bool GLInit::initDisplay() {
         onDestroy();
         return false;
     }
-    static const EGLint attr[] = {
+    EGLint attr[] = {
         EGL_CONTEXT_CLIENT_VERSION, 2,
         EGL_NONE, EGL_NONE
     };
@@ -65,14 +67,13 @@ bool GLInit::initDisplay() {
         onDestroy();
         return false;
     }
-
     eglQuerySurface(_mDisplay, _mSurface, EGL_WIDTH, &_mWindowWidth);
     eglQuerySurface(_mDisplay, _mSurface, EGL_HEIGHT, &_mWindowHeight);
-
     return true;
 }
 
-void GLInit::onDestroy() {
+void GLInit::onDestroy()
+{
     if (_mDisplay != EGL_NO_DISPLAY) {
         eglMakeCurrent(_mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
     	if (_mContext != EGL_NO_CONTEXT) {

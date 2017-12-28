@@ -1,13 +1,12 @@
-#extension GL_OES_EGL_image_external : require
+const char* camera_play_frag = STRINGIFY(
 
-precision mediump float;
-uniform samplerExternalOES camTexture;
+\n#extension GL_OES_EGL_image_external : require\n
+precision highp float;
+varying vec2                v_CamTextcoord;
+uniform samplerExternalOES  u_CameraTexture;
 
-varying vec2 v_CamTexCoordinate;
-varying vec2 v_TexCoordinate;
-
-void main ()
+void main()
 {
-    vec4 cameraColor = texture2D(camTexture, v_CamTexCoordinate);
-    gl_FragColor = cameraColor;
+	gl_FragColor = texture2D(u_CameraTexture, v_CamTextcoord);
 }
+);

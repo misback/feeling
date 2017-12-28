@@ -32,5 +32,13 @@ private:
     int                         _photoWidth;
     int                         _photoHeight;
     GLuint                      _sProgramPlay;
-    GLuint						_textureId;
+    GLuint						_vaoId;
+    GLuint						_vboBuffer;
+    GLuint						_texture;
+    GLuint                      _frameBuffer;
+    GLint						_positionLoc;
+    GLint						_textureLoc;
+    GLint						_mvpMatrixLoc;
+
+    glm::mat4                   _mvpMatrix;
 };

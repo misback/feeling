@@ -14,7 +14,7 @@ class GLInit : public Singleton<GLInit> {
 public:
     GLInit();
     ~GLInit();
-    bool                                initDisplay();
+    bool                                initDisplay(ANativeWindow *window);
     void		                        swapBuffers() { eglSwapBuffers(_mDisplay, _mSurface); }
     void                                onDestroy();
 

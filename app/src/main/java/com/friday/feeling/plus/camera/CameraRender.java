@@ -17,9 +17,8 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 public class CameraRender implements GLSurfaceView.Renderer, SurfaceTexture.OnFrameAvailableListener {
-    private static final String TAG = "CameraRender";
-    private final static int PHOTO_WIDTH = 1080;
-    private final static int PHOTO_HEIGHT = 1920;
+    private static final int MAX_PREVIEW_WIDTH = 1080;
+    private static final int MAX_PREVIEW_HEIGHT = 1920;
     private Context mContext;
     private SurfaceTexture mSurfaceTexture;
 
@@ -29,6 +28,7 @@ public class CameraRender implements GLSurfaceView.Renderer, SurfaceTexture.OnFr
 
     public CameraRender(Context context) {
         mContext = context;
+        nativeOnCreate();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class CameraRender implements GLSurfaceView.Renderer, SurfaceTexture.OnFr
         } else if (configsCount[0] > 0) {
             eglConfig = configs[0];
         }
-        nativeInitGL(PHOTO_WIDTH, PHOTO_HEIGHT);
+        nativeInitGL(MAX_PREVIEW_WIDTH, MAX_PREVIEW_HEIGHT);
         mSurfaceTexture = new SurfaceTexture(nativeGetTextureId());
         mSurfaceTexture.setOnFrameAvailableListener(this);
     }
@@ -89,5 +89,4 @@ public class CameraRender implements GLSurfaceView.Renderer, SurfaceTexture.OnFr
     private static native void nativeDrawFrame();
 
     private static native int nativeGetTextureId();
-
 }
