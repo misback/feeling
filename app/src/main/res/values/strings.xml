@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">feeling</string>
+    <string name="request_permission">该app需要相机权限.</string>
+    <string name="camera_error">该设备不支持Camera2 API.</string>
+</resources>
