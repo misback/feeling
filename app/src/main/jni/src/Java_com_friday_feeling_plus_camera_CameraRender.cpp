@@ -46,6 +46,11 @@ JNIEXPORT void JNICALL Java_com_friday_feeling_plus_camera_CameraRender_nativeDr
     CameraManager::getSingleton().drawFrame();
 }
 
+JNIEXPORT void JNICALL Java_com_friday_feeling_plus_camera_CameraRender_nativeOnSurfaceChanged(JNIEnv *env, jobject thiz, jint width, jint height)
+{
+    // Change();
+}
+
 JNIEXPORT jint JNICALL Java_com_friday_feeling_plus_camera_CameraRender_nativeGetTextureId(JNIEnv *env, jobject thiz)
 {
     return CameraManager::getSingleton().getCameraTextureId();

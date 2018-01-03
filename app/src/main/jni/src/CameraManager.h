@@ -21,11 +21,8 @@ public:
     void                        onPause();
     void                        onStop();
     void                        onDestroy();
-
     void                        initGL(float width, float height);
-    void                        deInitGL();
     void                        drawFrame();
-
     GLint                       getCameraTextureId();
 
 private:
@@ -35,7 +32,6 @@ private:
     GLuint						_vaoId;
     GLuint						_vboBuffer;
     GLuint						_texture;
-    GLuint                      _frameBuffer;
     GLint						_positionLoc;
     GLint						_textureLoc;
     GLint						_mvpMatrixLoc;

@@ -15,7 +15,6 @@ CameraManager::CameraManager()
     , _vaoId(0)
     , _vboBuffer(0)
     , _texture(0)
-    , _frameBuffer(0)
     , _positionLoc(-1)
     , _textureLoc(-1)
     , _mvpMatrixLoc(-1)
@@ -45,12 +44,16 @@ void CameraManager::onStop()
 
 void CameraManager::onDestroy()
 {
+    glDeleteVertexArrays(1, &_vaoId);
+    glDeleteBuffers(1, &_vboBuffer);
+    glDeleteTextures(1, &_texture);
+    glDeleteProgram(_sProgramPlay);
 }
 
 void CameraManager::initGL(float width, float height)
 {
-    _photoWidth = width;
-    _photoHeight = height;
+    _photoWidth     = width;
+    _photoHeight    = height;
     if (CompileShaderProgram(camera_play_vert, camera_play_frag, &_sProgramPlay)) {
         _positionLoc	= glGetAttribLocation(_sProgramPlay, "a_Position");
         _textureLoc		= glGetAttribLocation(_sProgramPlay, "a_Textcoord");
@@ -95,48 +98,20 @@ void CameraManager::initGL(float width, float height)
         glTexParameteri(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glBindTexture(GL_TEXTURE_EXTERNAL_OES, 0);
-        // fbo
-        glGenFramebuffers(1, &_frameBuffer);
-        glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-        glBindTexture(GL_TEXTURE_2D,   _texture);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _photoWidth, _photoHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        glBindTexture(GL_TEXTURE_2D, _texture);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture, 0);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-        glFrontFace(GL_CCW);
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_BLEND);
     }
-}
-
-void CameraManager::deInitGL()
-{
-    glDeleteVertexArrays(1, &_vaoId);
-    glDeleteBuffers(1, &_vboBuffer);
-    glDeleteTextures(1, &_texture);
-    glDeleteFramebuffers(1, &_frameBuffer);
-    glDeleteProgram(_sProgramPlay);
 }
 
 void CameraManager::drawFrame()
 {
     glBindVertexArray(_vaoId);
-    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glViewport(0, 0, _photoWidth, _photoHeight);
     glUseProgram(_sProgramPlay);
     glUniformMatrix4fv(_sProgramPlay, 1, GL_FALSE, glm::value_ptr(_mvpMatrix));
+    LOGE("111111111111111111111111111111111111");
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindVertexArray(0);
     glUseProgram(0);
 }
