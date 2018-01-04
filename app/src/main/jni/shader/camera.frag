@@ -1,6 +1,6 @@
 const char* camera_play_frag = STRINGIFY(
-
 \n#extension GL_OES_EGL_image_external : require\n
+
 precision highp float;
 varying vec2                v_CamTextcoord;
 uniform samplerExternalOES  u_CameraTexture;

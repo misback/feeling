@@ -55,9 +55,9 @@ void CameraManager::initGL(float width, float height)
     _photoWidth     = width;
     _photoHeight    = height;
     if (CompileShaderProgram(camera_play_vert, camera_play_frag, &_sProgramPlay)) {
-        _positionLoc	= glGetAttribLocation(_sProgramPlay, "a_Position");
-        _textureLoc		= glGetAttribLocation(_sProgramPlay, "a_Textcoord");
-        _mvpMatrixLoc	= glGetUniformLocation(_sProgramPlay, "u_MvpMatrix");
+        _positionLoc	= glGetAttribLocation(_sProgramPlay,    "a_Position");
+        _textureLoc		= glGetAttribLocation(_sProgramPlay,    "a_Textcoord");
+        _mvpMatrixLoc	= glGetUniformLocation(_sProgramPlay,   "u_MvpMatrix");
         GLfloat vertices[] = {
                 -1.0f, -1.0f, 0.0f, 1.0f,
                  1.0f, -1.0f, 1.0f, 1.0f,
@@ -89,7 +89,7 @@ void CameraManager::initGL(float width, float height)
         glEnableVertexAttribArray(_textureLoc);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
-        // 纹理
+        // texture
         glGenTextures(1, &_texture);
         glBindTexture(GL_TEXTURE_2D, _texture);
         glBindTexture(GL_TEXTURE_EXTERNAL_OES, _texture);
@@ -105,13 +105,14 @@ void CameraManager::drawFrame()
 {
     glBindVertexArray(_vaoId);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, _photoWidth, _photoHeight);
     glUseProgram(_sProgramPlay);
     glUniformMatrix4fv(_sProgramPlay, 1, GL_FALSE, glm::value_ptr(_mvpMatrix));
     LOGE("111111111111111111111111111111111111");
-
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_EXTERNAL_OES, _texture);
     glDrawArrays(GL_TRIANGLES, 0, 6);
-
     glBindVertexArray(0);
     glUseProgram(0);
 }
